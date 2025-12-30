@@ -1,0 +1,18 @@
+/* src/components/Canvas/WorkflowCanvas.css */
+
+.canvas-wrapper {
+  flex: 1;
+  overflow: visible !important; /* Change from 'auto' or 'hidden' to 'visible' */
+  background-color: #f8fafc;
+  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+  background-size: 24px 24px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 100px; /* Increase padding to give the menu room at the bottom */
+}
+
+.canvas-content {
+  min-width: min-content;
+  overflow: visible !important; /* Ensure the content container doesn't clip */
+}

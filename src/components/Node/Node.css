@@ -1,0 +1,329 @@
+/* Container for a single tree node */
+.tree-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* The actual Card UI */
+/* Update this section in your Node.css */
+.node-card-wrapper {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 180px;
+  padding: 10px;
+  position: relative;
+  z-index: 2; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+
+  /* ADD THESE TWO LINES */
+  overflow: visible !important; 
+  height: auto; 
+}
+
+.node-card-wrapper.condition { border-top: 4px solid #f59e0b; }
+.node-card-wrapper.action { border-top: 4px solid #3b82f6; }
+.node-card-wrapper.start { border-top: 4px solid #10b981; }
+.node-card-wrapper.end { border-top: 4px solid #ef4444; }
+
+.node-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.node-type-label {
+  font-size: 10px;
+  font-weight: bold;
+  color: #666;
+}
+
+.node-input {
+  width: 100%;
+  border: none;
+  font-weight: 500;
+  font-size: 14px;
+  background: transparent;
+}
+.node-input:focus { outline: none; border-bottom: 1px solid #3b82f6; }
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 16px;
+}
+.delete-btn:hover { color: red; }
+
+/* --- Lines & Connectors --- */
+
+.vertical-line {
+  width: 2px;
+  height: 20px;
+  background-color: #cbd5e1;
+}
+
+.children-container {
+  display: flex;
+  gap: 40px; /* Space between branches */
+  position: relative;
+}
+
+/* Visual trick for the horizontal line connecting branches */
+.child-branch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* Only draw horizontal connector lines if there are multiple children (Condition) */
+.children-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 180px); /* Rough calculation to span branches */
+  height: 2px;
+  background-color: #cbd5e1;
+  z-index: 0;
+  /* Hide this line if only 1 child */
+  display: none; 
+}
+
+/* If multiple children, show the horizontal bar */
+.children-container:has(> .child-branch:nth-child(2)) {
+  padding-top: 10px;
+  /* We actually handle the lines via Pseudo elements on children usually, 
+     but for this simpler demo, we rely on the vertical lines */
+}
+
+/* Branch Labels (True/False) */
+.branch-label {
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: #64748b;
+  margin-bottom: 4px;
+  border: 1px solid #e2e8f0;
+  z-index: 5;
+}
+
+/* --- Add Button Menu --- */
+.add-connection-point {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  position: relative;
+}
+
+.add-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: #e2e8f0;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.add-btn:hover { background: #3b82f6; color: white; }
+
+.add-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  width: 120px;
+  z-index: 100;
+}
+
+.add-menu button {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.add-menu button:hover { background: #f8fafc; color: #3b82f6; }
+
+/* Container for the relative positioning of the pop-over */
+.connection-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* The actual pop-over menu */
+.context-menu.popover {
+  position: absolute;
+  top: 100%; 
+  left: 50%;
+  transform: translateX(-50%);
+  background: white !important;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 150px;
+  z-index: 99999 !important; /* Extremely high z-index */
+  margin-top: 10px;
+}
+
+.menu-header {
+  font-size: 11px;
+  font-weight: bold;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.context-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.context-menu button:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+/* This ensures the pop-over is positioned relative to the '+' button area */
+.connection-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* The actual floating menu */
+.context-menu.popover {
+  position: absolute;
+  top: 35px; /* Positions it directly below the '+' button */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 160px;
+  z-index: 1000; /* Ensures it sits on top of all lines and other nodes */
+}
+
+/* Header inside the menu */
+.menu-header {
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+/* Menu Buttons */
+.context-menu button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.context-menu button:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #3b82f6;
+  transform: translateY(-1px);
+}
+/* This ensures the specific node card you are clicking on 
+   jumps to the front layer */
+.node-card-wrapper:focus-within,
+.node-card-wrapper:hover {
+  z-index: 100 !important;
+}
+
+/* Force the popover to be the absolute top layer */
+.context-menu.popover {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999 !important; /* Extremely high z-index */
+  background-color: white !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Stronger shadow so it stands out */
+  /* ... existing styles ... */
+}
+/* Horizontal bar for multiple children (Condition nodes) */
+.children-container {
+  display: flex;
+  gap: 40px;
+  position: relative;
+  padding-top: 20px;
+}
+
+/* Only show horizontal line if there's more than 1 child */
+.children-container:has(> .child-branch:nth-child(2))::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background-color: #cbd5e1;
+}
+
+/* Connect vertical line from parent to the horizontal bar */
+.children-container:has(> .child-branch:nth-child(2))::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: 2px;
+  height: 20px;
+  background-color: #cbd5e1;
+}
