@@ -1,4 +1,4 @@
-# 🚀 Professional Workflow Builder
+# 🚀 Workflow Builder
 
 A high-performance, interactive application built to visualize and manage complex workflow hierarchies. This project features a custom-built tree rendering engine and a normalized state management system.
 
@@ -60,3 +60,4 @@ To ensure a professional user experience, the interactive menus utilize `absolut
 * Vite (Fast Build Tooling)
 * CSS3 (Custom Flexbox Grid & Transitions)
 * No External UI Libraries (100% Custom Components)
+
